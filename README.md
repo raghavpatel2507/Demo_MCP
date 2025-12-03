@@ -6,25 +6,13 @@ This is a simplified version of AgentSphere-AI with all database and checkpointe
 
 ## What Changed
 
-### ✅ Removed
-- PostgreSQL database integration
-- LangGraph checkpointer (conversation persistence)
-- HITL (Human-in-the-Loop) tool approval workflow
-- Multi-tenant session management
-- Alembic database migrations
 
-### ✅ Kept
-- Simple chat interface
-- Multi-agent orchestration
-- All MCP server integrations (GitHub, YouTube, Gmail, etc.)
-- Message trimming for context window management
-- Dynamic agent loading
 
 ## Running the Application
 
 1. **Install dependencies:**
    ```bash
-   pip install -r requirements.txt
+   uv sync
    ```
 
 2. **Set up environment variables:**

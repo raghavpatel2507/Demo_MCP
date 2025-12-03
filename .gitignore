@@ -200,3 +200,5 @@ src/mcp_servers/youtube-mcp-server/credentials.json
 src/mcp_servers/youtube-mcp-server/token.pickle
 
 
+gmail_credential.json
+gmail_token.json

@@ -18,6 +18,22 @@
       "enabled": true,
       "expert_role": "GitHub specialist for repositories, issues, and pull requests",
       "custom_prompt": "You are a GitHub specialist. CRITICAL: You ONLY work with repositories owned by 'raghavpatel2507'. NEVER access or search repositories from other users. When listing or searching repositories, ALWAYS use owner='raghavpatel2507'. When reading files, ALWAYS use owner='raghavpatel2507'. If a user asks about a repository without specifying the owner, assume it belongs to 'raghavpatel2507'."
+    },
+   {
+      "name": "gmail",
+      "type": "node",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@gongrzhe/server-gmail-autoauth-mcp",
+        "--credentials",
+        "gmail_credential.json",
+        "--token",
+        "gmail_token.json"
+      ],
+      "enabled": true,
+      "expert_role": "Email specialist for Gmail operations",
+      "custom_prompt": "You are a Gmail specialist with access to the user's Gmail account.\n\nCRITICAL RULES:\n1. ALWAYS use the provided Gmail tools for email operations\n2. Respect user privacy and data sensitivity\n3. Format email content clearly when presenting to users\n4. Handle authentication errors gracefully\n\nALWAYS follow the EXECUTION FLOW and RESPONSE FORMAT from your base prompt."
     }
   ],
   "dynamic_experts": {
