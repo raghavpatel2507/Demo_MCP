@@ -266,7 +266,7 @@ class HttpMCPHandler(MCPHandler):
             # Debug: print full response for file reading tools
             if "file" in tool_name.lower() or "read" in tool_name.lower() or "get" in tool_name.lower():
                 print(f"🔍 Full API Response for {tool_name}:")
-                print(f"🔍 Result: {json.dumps(result, indent=2)[:500]}...")
+                #print(f"🔍 Result: {json.dumps(result, indent=2)[:500]}...")
             
             # Return the full content array so manager.py can process resources
             # Don't try to extract text here - let the manager handle it

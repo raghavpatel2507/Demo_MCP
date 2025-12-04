@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from claude_agent_sdk import ClaudeSDKClient, AssistantMessage, TextBlock, ToolUseBlock, ToolResultBlock
 
 from src.core.sdk_config import load_sdk_options
+from src.utils.ui import ToolProgress
 
 # Load environment variables
 load_dotenv()
@@ -23,7 +24,8 @@ async def main():
     print("🔄 Loading configuration...")
     options = load_sdk_options()
     
-    # Initialize Client
+    # Initialize Client and ToolProgress
+    tool_progress = ToolProgress()
     async with ClaudeSDKClient(options=options) as client:
         print("✅ Client initialized and connected to MCP servers")
         print()
@@ -48,21 +50,49 @@ async def main():
                     continue
 
                 # Send query
-                print("🤖 Assistant is thinking...")
+                tool_progress.show_status("🤖 Assistant is thinking...")
                 await client.query(user_input)
 
                 # Process response stream
+                current_tool = None
+                text_started = False
+                
                 async for message in client.receive_response():
                     if isinstance(message, AssistantMessage):
                         for block in message.content:
                             if isinstance(block, TextBlock):
-                                print(f"\n{block.text}\n")
-                            elif isinstance(block, ToolUseBlock):
-                                print(f"🛠️  Tool Use: {block.name}")
-                            elif isinstance(block, ToolResultBlock):
-                                # Usually we don't print raw tool results unless debugging
-                                pass
+                                # Show header for first text block
+                                if not text_started:
+                                    print("\n" + "=" * 60)
+                                    print("🤖 Assistant Response:")
+                                    print("=" * 60 + "\n")
+                                    text_started = True
                                 
+                                # Stream text character by character (like main.py)
+                                for char in block.text:
+                                    print(char, end="", flush=True)
+                                    await asyncio.sleep(0.01)  # Smooth streaming effect
+                                
+                            elif isinstance(block, ToolUseBlock):
+                                # Start progress spinner for this tool
+                                if text_started:
+                                    print()  # New line after text
+                                current_tool = block.name
+                                tool_progress.start(block.name)
+                                
+                            elif isinstance(block, ToolResultBlock):
+                                # Stop progress spinner when tool completes
+                                if current_tool:
+                                    tool_progress.stop()
+                                    current_tool = None
+                                    text_started = False  # Reset for next text block
+                
+                # Ensure spinner is stopped
+                if current_tool:
+                    tool_progress.stop()
+                    
+                if text_started:
+                    print()  # Final newline
                 print("=" * 60)
                 
             except KeyboardInterrupt:
